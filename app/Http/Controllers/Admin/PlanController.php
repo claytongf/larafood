@@ -7,7 +7,6 @@ use App\Http\Requests\StoreUpdatePlanRequest;
 use App\Models\Plan;
 use Illuminate\Http\Request;
 
-
 class PlanController extends Controller
 {
     private $repository;
@@ -54,7 +53,7 @@ class PlanController extends Controller
             return redirect()->back();
         }
 
-        if($plan->details->count() > 0){
+        if ($plan->details->count() > 0) {
             return redirect()->back()->with('error', 'Existem detalhes vinculados a esse plano, portanto, é necessário remover os detalhes primeiro!');
         }
 
@@ -63,7 +62,8 @@ class PlanController extends Controller
         return redirect()->route('plans.index');
     }
 
-    public function search(Request $request){
+    public function search(Request $request)
+    {
         $filters = $request->except('_token');
         $plans = $this->repository->search($request->filter);
         return view('admin.pages.plans.index', [
@@ -83,7 +83,8 @@ class PlanController extends Controller
         ]);
     }
 
-    public function update(StoreUpdatePlanRequest $request, $url){
+    public function update(StoreUpdatePlanRequest $request, $url)
+    {
         $plan = $this->repository->where('url', $url)->first();
         if (!$plan) {
             return redirect()->back();

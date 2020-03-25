@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Admin\ACL;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreUpdateProfileRequest;
-use App\Models\Profile;
+use App\Http\Requests\StoreUpdatePermissionRequest;
+use App\Models\Permission;
 use Illuminate\Http\Request;
 
-class ProfileController extends Controller
+class PermissionController extends Controller
 {
     protected $repository;
 
-    public function __construct(Profile $profile)
+    public function __construct(Permission $permission)
     {
-        $this->repository = $profile;
+        $this->repository = $permission;
     }
 
     /**
@@ -23,10 +23,10 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        $profiles = $this->repository->paginate();
+        $permissions = $this->repository->paginate();
 
-        return view('admin.pages.profiles.index', [
-            'profiles' => $profiles
+        return view('admin.pages.permissions.index', [
+            'permissions' => $permissions
         ]);
     }
 
@@ -37,20 +37,20 @@ class ProfileController extends Controller
      */
     public function create()
     {
-        return view('admin.pages.profiles.create');
+        return view('admin.pages.permissions.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\StoreUpdateProfileRequest  $request
+     * @param  \Illuminate\Http\StoreUpdatePermissionRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreUpdateProfileRequest $request)
+    public function store(StoreUpdatePermissionRequest $request)
     {
         $this->repository->create($request->all());
 
-        return redirect()->route('profiles.index');
+        return redirect()->route('permissions.index');
     }
 
     /**
@@ -61,10 +61,10 @@ class ProfileController extends Controller
      */
     public function show($id)
     {
-        if (!$profile = $this->repository->find($id)) {
+        if (!$permission = $this->repository->find($id)) {
             return redirect()->back();
         }
-        return view('admin.pages.profiles.show', compact('profile'));
+        return view('admin.pages.permissions.show', compact('permission'));
     }
 
     /**
@@ -75,29 +75,29 @@ class ProfileController extends Controller
      */
     public function edit($id)
     {
-        if (!$profile = $this->repository->find($id)) {
+        if (!$permission = $this->repository->find($id)) {
             return redirect()->back();
         }
 
-        return view('admin.pages.profiles.edit', compact('profile'));
+        return view('admin.pages.permissions.edit', compact('permission'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\StoreUpdateProfileRequest  $request
+     * @param  \Illuminate\Http\StoreUpdatePermissionRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreUpdateProfileRequest $request, $id)
+    public function update(StoreUpdatePermissionRequest $request, $id)
     {
-        if (!$profile = $this->repository->find($id)) {
+        if (!$permission = $this->repository->find($id)) {
             return redirect()->back();
         }
 
-        $profile->update($request->all());
+        $permission->update($request->all());
 
-        return redirect()->route('profiles.index');
+        return redirect()->route('permissions.index');
     }
 
     /**
@@ -109,14 +109,14 @@ class ProfileController extends Controller
     public function search(Request $request)
     {
         $filters = $request->only('filter');
-        $profiles = $this->repository->where(function ($query) use ($request) {
+        $permissions = $this->repository->where(function ($query) use ($request) {
             if ($request->filter) {
                 $query->where('name', 'LIKE', "%{$request->filter}%")
                     ->orWhere('description', 'LIKE', "%{$request->filter}%");
             }
         })->paginate();
 
-        return view('admin.pages.profiles.index', compact('profiles', 'filters'));
+        return view('admin.pages.permissions.index', compact('permissions', 'filters'));
     }
 
     /**
@@ -127,12 +127,12 @@ class ProfileController extends Controller
      */
     public function destroy($id)
     {
-        if (!$profile = $this->repository->find($id)) {
+        if (!$permission = $this->repository->find($id)) {
             return redirect()->back();
         }
 
-        $profile->delete();
+        $permission->delete();
 
-        return redirect()->route('profiles.index');
+        return redirect()->route('permissions.index');
     }
 }

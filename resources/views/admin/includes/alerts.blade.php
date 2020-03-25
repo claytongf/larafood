@@ -17,3 +17,9 @@
         <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
     </div>
 @endif
+
+@if (session('warning'))
+    <div class="alert alert-danger">
+        <i class="fas fa-exclamation-circle"></i> {{ session('warning') }}
+    </div>
+@endif
