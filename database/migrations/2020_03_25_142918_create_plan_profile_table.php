@@ -21,11 +21,11 @@ class CreatePlanProfileTable extends Migration
             $table->foreign('plan_id')
                         ->references('id')
                         ->on('plans')
-                        ->onDelete('cascade');
+                        ->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('profile_id')
                         ->references('id')
                         ->on('profiles')
-                        ->onDelete('cascade');
+                        ->onDelete('cascade')->onUpdate('cascade');
         });
     }
 
