@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Services\TenantService;
+use App\Tenant\Events\TenantCreatedEvent;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -66,13 +66,14 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        if(!$plan = session('plan')){
+        if (!$plan = session('plan')) {
             return redirect()->route('site.home');
         }
 
         $tenantService = app(TenantService::class);
 
         $user = $tenantService->make($plan, $data);
+        event(new TenantCreatedEvent($user));
 
         return $user;
     }
