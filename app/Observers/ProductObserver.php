@@ -16,6 +16,7 @@ class ProductObserver
     public function creating(Product $product)
     {
         $product->flag = Str::kebab($product->name);
+        $product->uuid = Str::uuid();
     }
 
     /**
